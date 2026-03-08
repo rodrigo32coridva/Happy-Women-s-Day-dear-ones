@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para mi Amor ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            height: 100vh;
+            width: 100vw;
+            background: radial-gradient(circle at center, #2d0a1a 0%, #050103 100%);
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            touch-action: none; /* Evita que la pantalla rebote en el cel */
+        }
+
+        /* Texto flotante central */
+        .ui-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            z-index: 10;
+            pointer-events: none; /* Deja que los toques pasen al fondo */
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #ffb3c1;
+            text-shadow: 0 0 20px rgba(255, 77, 109, 0.8);
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeIn 3s forwards 1s;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        /* Estilo de las flores/corazones que nacen */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            animation: bloom 4s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; filter: blur(5px); }
+            20% { opacity: 1; filter: blur(0px); }
+            100% { transform: scale(1.5) rotate(45deg) translateY(-100px); opacity: 0; }
+        }
+
+        canvas {
+            position: absolute;
+            top: 0; left: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui-container">
+        <h1>Tú haces florecer <br> mi mundo</h1>
+        <p>Toca la pantalla...</p>
+    </div>
+
+    <script>
+        const emojis = ['🌸', '🌹', '💖', '✨', '🌻', '🌷', '🦋'];
+
+        function createParticle(x, y) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            
+            // Elegir un emoji aleatorio
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            p.innerText = randomEmoji;
+            
+            // Posición
+            p.style.left = x + 'px';
+            p.style.top = y + 'px';
+            
+            // Tamaño aleatorio
+            const size = Math.random() * 20 + 20 + 'px';
+            p.style.fontSize = size;
+
+            document.body.appendChild(p);
+
+            // Borrar después de la animación para no saturar el cel
+            setTimeout(() => {
+                p.remove();
+            }, 4000);
+        }
+
+        // Detectar toques en celular
+        document.addEventListener('touchstart', (e) => {
+            for(let i=0; i < e.touches.length; i++) {
+                createParticle(e.touches[i].clientX, e.touches[i].clientY);
+            }
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            // Crear flores mientras desliza el dedo
+            if (Math.random() > 0.8) { // No crear demasiadas para que no se trabe
+                createParticle(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        // También funciona con mouse para que tú lo pruebes
+        document.addEventListener('mousedown', (e) => {
+            createParticle(e.clientX, e.clientY);
+        });
+    </script>
+</body>
+</html>

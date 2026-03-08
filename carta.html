@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Niña Hermosa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe3e3;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        .gift-container {
+            position: relative;
+            width: 350px;
+            height: 250px;
+            cursor: pointer;
+            perspective: 1000px;
+            transition: transform 0.1s ease;
+        }
+
+        .envelope {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #ff4d6d;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 10;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            border-left: 175px solid transparent;
+            border-right: 175px solid transparent;
+            border-top: 130px solid #fa5252;
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 12;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            width: 40px;
+            height: 40px;
+            background: #ff0000;
+            z-index: 15;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: 0.5s;
+        }
+
+        .heart-seal::before, .heart-seal::after {
+            content: '';
+            width: 40px; height: 40px;
+            background: #ff0000;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart-seal::before { left: -20px; }
+        .heart-seal::after { top: -20px; }
+
+        .letter {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: #ffffff;
+            z-index: 5;
+            transition: all 0.8s ease;
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            opacity: 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .letter-greeting {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: #ff3366;
+            margin-bottom: 5px;
+        }
+
+        .letter-body {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .gift-container.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .gift-container.open .heart-seal {
+            opacity: 0;
+            transform: translate(-50%, -150px) rotate(45deg);
+        }
+
+        .gift-container.open .letter {
+            transform: translateY(-130px); /* Sube un poco más por el texto largo */
+            z-index: 11;
+            opacity: 1;
+            height: auto; /* Se ajusta al contenido */
+            min-height: 320px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .star {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: twinkle 4s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .hint {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            color: #ff3366;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gift-container" id="gift" onclick="this.classList.toggle('open')">
+        <div class="envelope">
+            <div class="heart-seal"></div>
+        </div>
+        <div class="letter">
+            <h2 class="letter-greeting">¡Feliz Día de la Mujer!</h2>
+            <div style="font-size: 25px; margin-bottom: 5px;">🌹✨</div>
+            <p class="letter-body">
+                Para la mujer que ilumina mis días con su sonrisa y su luz.<br>
+                <strong>Eres valiente, fuerte y única.</strong><br>
+                Gracias por cada abrazo, cada palabra y cada momento compartido.<br>
+                Tu ternura y tu risa hacen que mi mundo sea más bonito.<br>
+                Admiro tu fuerza, tu paciencia y tu magia.<br>
+                Te amo mucho, hermosa, hoy y siempre.<br>
+                Mi corazón siempre late por ti. 💖
+            </p>
+        </div>
+        <div class="hint">Toca el sobre para abrirlo</div>
+    </div>
+
+    <script>
+        const gift = document.getElementById('gift');
+        gift.addEventListener('mousemove', (e) => {
+            const rect = gift.getBoundingClientRect();
+            const x = (e.clientX - rect.left - rect.width / 2) / 15;
+            const y = (e.clientY - rect.top - rect.height / 2) / 15;
+            gift.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+        });
+
+        gift.addEventListener('mouseleave', () => {
+            gift.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+
+        function createStars() {
+            for(let i=0; i<30; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                let size = Math.random() * 5 + 2 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                document.body.appendChild(star);
+            }
+        }
+        createStars();
+    </script>
+</body>
+</html>
